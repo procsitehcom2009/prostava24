@@ -6,7 +6,7 @@ use App\Lib\Router;
 
 /** Публичная страница */
 
-Router::add(
+$rout = Router::add(
 	"GET",
 	"/",
 	[InfoController::class, 'showAction']
