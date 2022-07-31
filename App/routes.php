@@ -1,6 +1,7 @@
 <?php
 
 use App\Controller\UserController;
+use App\Controller\InfoController;
 use App\Lib\Router;
 
 /** Публичная страница */
@@ -8,5 +9,11 @@ use App\Lib\Router;
 Router::add(
 	"GET",
 	"/",
-	[UserController::class, 'showUserAction']
+	[InfoController::class, 'showAction']
+);
+
+Router::add(
+    "GET",
+    "/user/",
+    [UserController::class, 'showUserAction']
 );

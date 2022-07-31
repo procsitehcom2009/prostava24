@@ -10,9 +10,8 @@ class UserController
 
 	public static function showUserAction()
 	{
-        $content = Render::renderContent("admin-user-change");
+        $content = Render::renderContent("admin-user");
         return Render::renderLayout($content,"admin");
-
 	}
 
 }
