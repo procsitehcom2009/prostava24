@@ -87,4 +87,10 @@ class UserController
 
 	}
 
+    public static function showUserInfoAction()
+    {
+        $content = Render::renderContent("user-info", ['user'=>Helper::getAuthorized()]);
+        return Render::renderLayout($content,"user");
+    }
+
 }
