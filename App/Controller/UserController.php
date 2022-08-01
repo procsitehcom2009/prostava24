@@ -6,6 +6,7 @@ use App\Config\Database;
 use App\Lib\Helper;
 use App\Lib\Render;
 use App\Service\UserService;
+use App\Controller\InfoController;
 
 class UserController
 {
@@ -18,8 +19,7 @@ class UserController
     public static function logOutUser(): string
     {
         Helper::destroyAuthorized();
-        $content = Render::renderContent("index-info");
-        return Render::renderLayout($content,"index");
+        return InfoController::showAction();
     }
 
     public static function Authorized(): string
@@ -30,20 +30,19 @@ class UserController
         $user = UserService::getUserByEmail(Database::getDatabase(), $validateEmail);
         if (!isset($user))
         {
-            return Render::renderContent("login", []);
+            return self::logInUser();
         }
         else
         {
             $isCorrectPassword = password_verify($validatePassword, $user->getPassword());
             if (!$isCorrectPassword)
             {
-                return Render::renderContent("login", []);
+                return self::logInUser();
             }
             else
             {
                 Helper::setAuthorized($user->getId(), $user->getEmail(), $user->getPassword());
-                $content = Render::renderContent("user-profile");
-                return Render::renderLayout($content,"user");
+                return self::profileUserAction();
             }
         }
     }
@@ -69,16 +68,21 @@ class UserController
         }
     }
 
+    private static function profileUserAction()
+    {
+        $content = Render::renderContent("user-profile");
+        return Render::renderLayout($content,"user");
+    }
+
 	public static function showUserAction()
 	{
         if (!self::isAuthorized())
         {
-            return Render::renderContent("login", []);
+            return self::logInUser();
         }
         else
         {
-            $content = Render::renderContent("user-profile");
-            return Render::renderLayout($content,"user");
+            return self::profileUserAction();
         }
 
 	}

@@ -45,7 +45,7 @@ class Helper
         );
     }
 
-    public static function destroyAuthorized()
+    public static function destroyAuthorized(): void
     {
         session_start();
         $_SESSION = [];

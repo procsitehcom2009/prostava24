@@ -20,7 +20,7 @@ Router::add(
 
 Router::add(
     "GET",
-    "/logout",
+    "/logout/",
     [UserController::class, 'logOutUser']
 );
 
