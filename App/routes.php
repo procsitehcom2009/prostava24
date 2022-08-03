@@ -42,3 +42,9 @@ Router::add(
     "/user/",
     [UserController::class, 'Authorized']
 );
+
+Router::add(
+    "POST",
+    "/auth/telegram/",
+    [UserController::class, 'TelegramAuthorized']
+);

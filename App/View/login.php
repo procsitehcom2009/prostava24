@@ -33,6 +33,19 @@
 
 								<input class="btn btn-outline-light btn-lg px-5" type="submit" value="Войти">
 							</form>
+                            <script async src="https://telegram.org/js/telegram-widget.js?19" data-telegram-login="cryptobitrix_bot" data-size="large" data-onauth="onTelegramAuth(user)"></script>
+                            <script type="text/javascript">
+                                function onTelegramAuth(user) {
+                                    $.ajax({
+                                        url: "/auth/telegram/",
+                                        type: "POST",
+                                        data: {"id": user.id, "first_name": user.first_name, "last_name": user.last_name, "hash,": user.hash, "userAuthDate": user.auth_date},
+                                        success: function(data) {
+                                            console.log(data);
+                                        }
+                                    })
+                                }
+                            </script>
 						</div>
 					</div>
 				</div>
