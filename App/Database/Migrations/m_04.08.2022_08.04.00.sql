@@ -1,0 +1,2 @@
+ALTER TABLE `up_user` ADD `firstName` VARCHAR(500) NOT NULL AFTER `PASSWORD`, ADD `lastName` VARCHAR(500) NOT NULL AFTER `firstName`, ADD `telegramAuth` BOOLEAN NOT NULL AFTER `lastName`;
+UPDATE `up_user` SET telegramAuth='0' WHERE ID=1;
