@@ -41,7 +41,7 @@
                                         type: "POST",
                                         data: {"auth_data": user},
                                         success: function(data) {
-                                            console.log(data);
+                                            window.location.href = data;
                                         }
                                     })
                                 }

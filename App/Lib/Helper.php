@@ -25,13 +25,14 @@ class Helper
 		return ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
 	}
 
-    public static function setAuthorized(int $id, string $userEmail, string $userPasswordHash): void
+    public static function setAuthorized(int $id, string $userEmail, string $userPasswordHash, bool $telegramAuth): void
     {
         session_start();
 
         $_SESSION['userId'] = $id;
         $_SESSION['userEmail'] = $userEmail;
         $_SESSION['userPasswordHash'] = $userPasswordHash;
+        $_SESSION['telegramAuth'] = $telegramAuth;
     }
 
     public static function getAuthorized(): array
@@ -41,7 +42,8 @@ class Helper
         return $sessionUserData = array(
             'userId' => $_SESSION['userId'],
             'userEmail' => $_SESSION['userEmail'],
-            'userPasswordHash' =>  $_SESSION['userPasswordHash']
+            'userPasswordHash' =>  $_SESSION['userPasswordHash'],
+            'telegramAuth' =>  $_SESSION['telegramAuth']
         );
     }
 

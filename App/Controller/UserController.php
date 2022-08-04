@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Config\Database;
 use App\Lib\Helper;
 use App\Lib\Render;
+use App\Model\User;
 use App\Service\UserService;
 use App\Controller\InfoController;
 
@@ -41,7 +42,7 @@ class UserController
             }
             else
             {
-                Helper::setAuthorized($user->getId(), $user->getEmail(), $user->getPassword());
+                Helper::setAuthorized($user->getId(), $user->getEmail(), $user->getPassword(), false);
                 return self::profileUserAction();
             }
         }
@@ -49,16 +50,29 @@ class UserController
 
     public static function TelegramAuthorized(): string
     {
-        $prepareTelegramUserData = Helper::prepareTelegramUserData($_POST['auth_date']);
+        $prepareTelegramUserData = Helper::prepareTelegramUserData($_POST['auth_data']);
 
         if (strcmp($prepareTelegramUserData['hash'], $prepareTelegramUserData['check_hash']) !== 0) {
-            return "Data is NOT from Telegram";
+            return Helper::getUrl()."/login/";
         }
         if ((time() - $prepareTelegramUserData['auth_data']['auth_date']) > 86400) {
-            return "Data is outdated";
+            return Helper::getUrl()."/login/";
         }
 
+        self::TelegramRegistration($prepareTelegramUserData['auth_data'], $prepareTelegramUserData['hash']);
+
+        Helper::setAuthorized($prepareTelegramUserData['auth_data']['id'], $prepareTelegramUserData['auth_data']['id'], $prepareTelegramUserData['hash'], true);
         return Helper::getUrl()."/user/info/";
+    }
+
+    public static function TelegramRegistration(array $authData, string $hash): void
+    {
+        $user = UserService::getUserByEmail(Database::getDatabase(), $authData['id']);
+        if (!isset($user))
+        {
+            $newTelegramUser = new User(null,$authData['id'],$hash,$authData['first_name'],$authData['last_name'],true, false, date("Y-m-d H:i:s"), date("Y-m-d H:i:s"));
+            UserService::addUser(Database::getDatabase(), $newTelegramUser);
+        }
     }
 
     public static function isAuthorized(): bool

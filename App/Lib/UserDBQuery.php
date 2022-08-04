@@ -19,4 +19,14 @@ class UserDBQuery
 			LIMIT 1
 		";
     }
+
+    public static function addUser(): string
+    {
+        return "
+			INSERT INTO `up_user`
+			(`EMAIL`, `PASSWORD`, `firstName`, `lastName`, `telegramAuth`, `ISADMIN`, `DATE_CREATE`, `DATE_UPDATE`)
+			VALUES
+			(?,?,?,?,?,?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)
+		";
+    }
 }

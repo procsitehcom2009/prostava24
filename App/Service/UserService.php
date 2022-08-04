@@ -46,7 +46,24 @@ class UserService
 
     public static function addUser(mysqli $db, User $user): User
     {
-        //
+        $query = UserDBQuery::addUser();
+
+        $stmt = mysqli_prepare($db, $query);
+        mysqli_stmt_bind_param($stmt, "ssssii",
+            $user->getEmail(),
+            $user->getPassword(),
+            $user->getFirstName(),
+            $user->getLastName(),
+            $user->getTelegramAuth(),
+            $user->getIsAdmin()
+        );
+
+        $result = mysqli_stmt_execute($stmt);
+
+        if (!$result)
+        {
+            trigger_error(mysqli_error($db), E_USER_ERROR);
+        }
     }
 
 }
