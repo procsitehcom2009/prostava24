@@ -8,6 +8,9 @@ class User
     private $id;
     private $email;
     private $password;
+    private $firstName;
+    private $lastName;
+    private $telegramAuth;
     private $isAdmin;
     private $dateCreate;
     private $dateUpdate;
@@ -16,16 +19,21 @@ class User
      * @param $id
      * @param $email
      * @param $password
-     * @param $userHash
+     * @param $firstName
+     * @param $lastName
+     * @param $telegramAuth
      * @param $isAdmin
      * @param $dateCreate
      * @param $dateUpdate
      */
-    public function __construct($id, $email, $password, $isAdmin, $dateCreate, $dateUpdate)
+    public function __construct($id, $email, $password, $firstName, $lastName, $telegramAuth, $isAdmin, $dateCreate, $dateUpdate)
     {
         $this->id = $id;
         $this->email = $email;
         $this->password = $password;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+        $this->telegramAuth = $telegramAuth;
         $this->isAdmin = $isAdmin;
         $this->dateCreate = $dateCreate;
         $this->dateUpdate = $dateUpdate;
@@ -77,6 +85,54 @@ class User
     public function setPassword($password): void
     {
         $this->password = $password;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @param mixed $firstName
+     */
+    public function setFirstName($firstName): void
+    {
+        $this->firstName = $firstName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param mixed $lastName
+     */
+    public function setLastName($lastName): void
+    {
+        $this->lastName = $lastName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTelegramAuth()
+    {
+        return $this->telegramAuth;
+    }
+
+    /**
+     * @param mixed $telegramAuth
+     */
+    public function setTelegramAuth($telegramAuth): void
+    {
+        $this->telegramAuth = $telegramAuth;
     }
 
     /**

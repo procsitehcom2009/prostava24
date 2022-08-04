@@ -18,6 +18,9 @@ class UserService
                 $user['id'],
                 $user['email'],
                 $user['password'],
+                $user['firstName'],
+                $user['lastName'],
+                $user['telegramAuth'],
                 $user['isAdmin'],
                 $user['dateCreate'],
                 $user['dateUpdate']
@@ -39,6 +42,11 @@ class UserService
         }
 
         return self::prepareUserData($result);
+    }
+
+    public static function addUser(mysqli $db, User $user): User
+    {
+        //
     }
 
 }

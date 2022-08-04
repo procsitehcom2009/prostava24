@@ -52,4 +52,25 @@ class Helper
         session_destroy();
     }
 
+    public static function prepareTelegramUserData(array $auth_data): array
+    {
+        $ini = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/App/Config/config.ini');
+        $botToken= $ini['botToken'];
+
+        $check_hash = $auth_data['hash'];
+        unset($auth_data['hash']);
+
+        $data_check_arr = [];
+        foreach ($auth_data as $key => $value) {
+            $data_check_arr[] = $key . '=' . $value;
+        }
+
+        sort($data_check_arr);
+        $data_check_string = implode("\n", $data_check_arr);
+        $secret_key = hash('sha256', $botToken, true);
+        $hash = hash_hmac('sha256', $data_check_string, $secret_key);
+
+        return array("check_hash"=>$check_hash,"hash"=>$hash,"auth_data"=>$auth_data);
+    }
+
 }

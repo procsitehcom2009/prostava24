@@ -49,29 +49,12 @@ class UserController
 
     public static function TelegramAuthorized(): string
     {
-        $botToken="1148080855:AAGlLblxzfI7BjakE3kuxiU57dCNDoxoIEA";
-        $check_hash = _POST["hash"];
-        $auth_data = array(
-            "id"=>$_POST["id"],
-            "first_name"=>$_POST["first_name"],
-            "last_name"=>$_POST["last_name"],
-            "auth_date"=>$_POST["auth_date"]
-        );
+        $prepareTelegramUserData = Helper::prepareTelegramUserData($_POST['auth_date']);
 
-        $data_check_arr = [];
-        foreach ($auth_data as $key => $value) {
-            $data_check_arr[] = $key . '=' . $value;
-        }
-
-        sort($data_check_arr);
-        $data_check_string = implode("\n", $data_check_arr);
-        $secret_key = hash('sha256', $botToken, true);
-        $hash = hash_hmac('sha256', $data_check_string, $secret_key);
-
-        if (strcmp($hash, $check_hash) !== 0) {
+        if (strcmp($prepareTelegramUserData['hash'], $prepareTelegramUserData['check_hash']) !== 0) {
             return "Data is NOT from Telegram";
         }
-        if ((time() - $auth_data['auth_date']) > 86400) {
+        if ((time() - $prepareTelegramUserData['auth_data']['auth_date']) > 86400) {
             return "Data is outdated";
         }
 
