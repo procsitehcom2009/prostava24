@@ -52,9 +52,14 @@ class Helper
         session_destroy();
     }
 
+    public static function getPathToApp(): string
+    {
+        return str_replace("Public","App",$_SERVER['DOCUMENT_ROOT']);
+    }
+
     public static function prepareTelegramUserData(array $auth_data): array
     {
-        $ini = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/App/Config/config.ini');
+        $ini = parse_ini_file(self::getPathToApp().'/Config/config.ini');
         $botToken= $ini['botToken'];
 
         $check_hash = $auth_data['hash'];
