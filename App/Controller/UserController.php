@@ -42,7 +42,7 @@ class UserController
             }
             else
             {
-                Helper::setAuthorized($user->getId(), $user->getEmail(), $user->getPassword(), false);
+                Helper::setAuthorized($user->getId(), $user->getEmail(), $user->getPassword());
                 return self::profileUserAction();
             }
         }
@@ -59,7 +59,16 @@ class UserController
             return Helper::getUrl()."/login/";
         }
 
-        self::TelegramRegistration($prepareTelegramUserData['auth_data'], $prepareTelegramUserData['hash']);
+        $user = UserService::getUserByEmail(Database::getDatabase(), $prepareTelegramUserData['auth_data']['id']);
+
+        if ($user->getId()==0)
+        {
+            self::TelegramRegistration($prepareTelegramUserData['auth_data'], $prepareTelegramUserData['hash']);
+        }
+        else
+        {
+            UserService::setPasswordByEmail(Database::getDatabase(),$prepareTelegramUserData['auth_data']['id'], $prepareTelegramUserData['hash']);
+        }
 
         Helper::setAuthorized($prepareTelegramUserData['auth_data']['id'], $prepareTelegramUserData['auth_data']['id'], $prepareTelegramUserData['hash'], true);
         return Helper::getUrl()."/user/info/";
@@ -67,12 +76,8 @@ class UserController
 
     public static function TelegramRegistration(array $authData, string $hash): void
     {
-        $user = UserService::getUserByEmail(Database::getDatabase(), $authData['id']);
-        if (!isset($user))
-        {
-            $newTelegramUser = new User(null,$authData['id'],$hash,$authData['first_name'],$authData['last_name'],true, false, date("Y-m-d H:i:s"), date("Y-m-d H:i:s"));
-            UserService::addUser(Database::getDatabase(), $newTelegramUser);
-        }
+        $newTelegramUser = new User(null,$authData['id'],$hash,$authData['first_name'],$authData['last_name'],true, false, date("Y-m-d H:i:s"), date("Y-m-d H:i:s"));
+        UserService::addUser(Database::getDatabase(), $newTelegramUser);
     }
 
     public static function isAuthorized(): bool

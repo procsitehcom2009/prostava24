@@ -12,8 +12,14 @@ class UserService
     public static function prepareUserData(\mysqli_result $userData) : User
     {
         $user = mysqli_fetch_assoc($userData);
-
-        return
+		
+		if (!isset($user))
+		{
+			return new User(0,null,null,null,null,null,null,null,null);
+		}
+		else 
+		{
+		return
             new User(
                 $user['id'],
                 $user['email'],
@@ -25,6 +31,7 @@ class UserService
                 $user['dateCreate'],
                 $user['dateUpdate']
             );
+		}
     }
 
     public static function getUserByEmail(mysqli $db, string $email): User
@@ -66,4 +73,17 @@ class UserService
         }
     }
 
+    public static function setPasswordByEmail(mysqli $db, string $userEmail, string $password): void
+    {
+        $query = UserDBQuery::setPasswordByEmail();
+
+        $stmt = mysqli_prepare($db, $query);
+        mysqli_stmt_bind_param($stmt, "ss", $password, $userEmail);
+        $result = mysqli_stmt_execute($stmt);
+
+        if (!$result)
+        {
+            trigger_error(mysqli_error($db), E_USER_ERROR);
+        }
+    }
 }
